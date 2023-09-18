@@ -117,9 +117,12 @@ const updateProfile = async (req, res) => {
 
     if (!user) return res.status(400).json({ message: "User Not exist" })
 
+    
     const { first_name, last_name, gender, phone, age, answer } = req.body;
+    const existingPhone = await User.findOne({phone:phone})
+    console.log(existingPhone)
 
-    if (phone === user.phone) return res.status(400).json({ message: "Phone number is  already exists" })
+    if (existingPhone && phone !== user.phone) return res.status(400).json({ message: "Phone number is  already exists" })
     
     user.first_name = first_name || user.first_name
     user.last_name = last_name || user.last_name
