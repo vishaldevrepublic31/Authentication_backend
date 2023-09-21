@@ -1,5 +1,6 @@
 import express from "express";
 import isLoggedin from "../middlewares/authMiddleware.js";
+
 import {
   createPost,
   deletePost,

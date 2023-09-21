@@ -1,5 +1,8 @@
 import Post from "../model/post.js";
 import { User } from "../model/user.js";
+import fs from "fs/promises";
+
+import cloudinary from "cloudinary";
 
 const getAllPost = async (req, res) => {
   try {
@@ -23,7 +26,7 @@ const getAllPost = async (req, res) => {
 };
 
 const createPost = async (req, res) => {
-  const { title, description } = req.body;
+  const { title, description, avatar } = req.body;
   const userId = req.id;
   try {
     if (!title || !description)
@@ -33,22 +36,18 @@ const createPost = async (req, res) => {
     const post = await Post.create({
       title,
       description,
-      avatar: {
-        public_id: title,
-        secure_url:
-          "https://res.cloudinary.com/du9jzqlpt/image/upload/v1674647316/avatar_drzgxv.jpg",
-      },
+      avatar,
       creator: userId,
     });
 
     const user = await User.findById(userId);
+    console.log(req.file);
     if (!user) {
       return res
         .status(400)
         .json({ success: false, message: "user not found!" });
     } else {
       await post.save();
-
       user.post.push(post);
       await user.save();
 
@@ -61,7 +60,7 @@ const createPost = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Somthing wenr wrong!",
+      message: "Somthing wenr wrong! ",
       error,
     });
   }
@@ -166,7 +165,7 @@ const getUserPosts = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      posts: user.post,
+      posts: user.post || [],
     });
     console.log("user posts ->", user.post);
   } catch (error) {

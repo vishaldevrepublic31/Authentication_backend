@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 import dotenv from "dotenv";
+import { v2 } from "cloudinary";
 
 import connectDb from "./config/db.js";
 import userRoutes from "./routes/userRoute.js";

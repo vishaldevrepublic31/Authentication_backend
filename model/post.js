@@ -11,12 +11,7 @@ const postSchema = new mongoose.Schema(
       required: [true, "description is required !"],
     },
     avatar: {
-      public_id: {
-        type: String,
-      },
-      secure_url: {
-        type: String,
-      },
+      type: String,
     },
     creator: {
       type: mongoose.Types.ObjectId,
